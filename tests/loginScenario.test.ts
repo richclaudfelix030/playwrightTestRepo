@@ -8,10 +8,10 @@ test.describe('Sequential Tests', () => {
         await page.getByPlaceholder('パスワード').click();
         await page.getByPlaceholder('パスワード').fill('asdfasdf');
         await page.getByRole('button', { name: 'ログイン', exact: true }).click();
-        await expect(page.getByText('×メールアドレスもしくはパスワードが正しくありません')).toBeVisible();
+        await expect(page.getByText('×メールアドレスもしくはパスワードが正しくありません')).toBeVisible(); //asserts wrong email/password pop-up
       });
 
-      test('login page test', async ({ page }) => {
+      test('valid login page test', async ({ page }) => {
         await page.goto('https://app.yarakuzen.com/ja/auth');
         await page.getByPlaceholder('メールアドレス', { exact: true }).click();
         await page.getByPlaceholder('メールアドレス', { exact: true }).fill('cloudfeliximas@yahoo.com');
@@ -19,6 +19,9 @@ test.describe('Sequential Tests', () => {
         await page.getByPlaceholder('パスワード').fill('ASDFasdf12');
         await page.getByRole('button', { name: 'ログイン', exact: true }).click();
         await page.waitForNavigation();
-        await expect(page.url()).toBe('https://app.yarakuzen.com/');
+        await expect(page.url()).toBe('https://app.yarakuzen.com/'); //asserts successful login
+        await page.locator('.sign-out-btn').click();
+        await page.waitForNavigation();
+        await expect(page.url()).toBe('https://app.yarakuzen.com/auth'); //asserts successful logout
       });
 });
